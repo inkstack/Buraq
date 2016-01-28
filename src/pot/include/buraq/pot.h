@@ -2,7 +2,7 @@
 #pragma once
 
 
-#include <fiblib/fiblib_api.h>
+#include <buraq/pot_api.h>
 
 
 namespace fiblib

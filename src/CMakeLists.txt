@@ -14,9 +14,9 @@ configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_N
 # 
 
 # Libraries
-set(IDE_FOLDER "")
-add_subdirectory(base)
-add_subdirectory(fib)
+set(IDE_FOLDER "Modules")
+add_subdirectory(core)
+add_subdirectory(pot)
 
 # Examples
 set(IDE_FOLDER "Examples")
@@ -24,7 +24,7 @@ add_subdirectory(examples)
 
 # Tests
 set(IDE_FOLDER "Tests")
-add_subdirectory(tests)
+# add_subdirectory(tests)
 
 
 # 

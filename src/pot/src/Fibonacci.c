@@ -1,5 +1,5 @@
 
-#include <fiblib/Fibonacci.h>
+#include <buraq/pot.h>
 
 
 namespace fiblib

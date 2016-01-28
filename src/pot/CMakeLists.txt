@@ -11,15 +11,15 @@
 # 
 
 # Target name
-set(target fiblib)
+set(target pot)
 
 # Exit here if required dependencies are not met
 message(STATUS "Lib ${target}")
 
 # Set API export file and macro
 string(TOUPPER ${target} target_upper)
-set(feature_file "include/${target}/${target}_features.h")
-set(export_file  "include/${target}/${target}_api.h")
+set(feature_file "include/${META_PROJECT_NAME_LOWER}/${target}_features.h")
+set(export_file  "include/${META_PROJECT_NAME_LOWER}/${target}_api.h")
 set(export_macro "${target_upper}_API")
 
 
@@ -27,15 +27,15 @@ set(export_macro "${target_upper}_API")
 # Sources
 # 
 
-set(include_path "${CMAKE_CURRENT_SOURCE_DIR}/include/${target}")
+set(include_path "${CMAKE_CURRENT_SOURCE_DIR}/include/${META_PROJECT_NAME_LOWER}")
 set(source_path  "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(headers
-    ${include_path}/Fibonacci.h
+    ${include_path}/pot.h
 )
 
 set(sources
-    ${source_path}/Fibonacci.cpp
+    ${source_path}/Fibonacci.c
 )
 
 # Group source files

@@ -95,7 +95,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCH
         -Wextra
         -Wunused
 
-        -Wreorder
         -Wignored-qualifiers
         -Wmissing-braces
         -Wreturn-type
