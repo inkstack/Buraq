@@ -1,25 +1,15 @@
-set(OPENCL_FOUND ON CACHE BOOL "OpenCL library is found")
-if(APPLE)
-  set(OPENCL_LIBRARY "-framework OpenCL" CACHE STRING "OpenCL library")
-  set(OPENCL_INCLUDE_DIR "" CACHE PATH "OpenCL include directory")
-else(APPLE)
-  set(OPENCL_LIBRARY "" CACHE STRING "OpenCL library")
-  set(OPENCL_INCLUDE_DIR "${OpenCV_SOURCE_DIR}/3rdparty/include/opencl/1.2" CACHE PATH "OpenCL include directory")
-endif(APPLE)
-mark_as_advanced(OPENCL_INCLUDE_DIR OPENCL_LIBRARY)
-
-if(OPENCL_FOUND)
-  if(OPENCL_LIBRARY)
+if(OpenCL_FOUND)
+  if(OpenCL_LIBRARY)
     set(HAVE_OPENCL_STATIC ON)
-    set(OPENCL_LIBRARIES "${OPENCL_LIBRARY}")
+    set(OpenCL_LIBRARY "${OpenCL_LIBRARY}")
   else()
     set(HAVE_OPENCL_STATIC OFF)
   endif()
 
   if(NOT HAVE_OPENCL_STATIC)
     try_compile(__VALID_OPENCL
-      "${OpenCV_BINARY_DIR}"
-      "${OpenCV_SOURCE_DIR}/cmake/checks/opencl.cpp"
+      "${CMAKE_BINARY_DIR}"
+      "${CMAKE_SOURCE_DIR}/checks/opencl.cpp"
       CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:STRING=${OPENCL_INCLUDE_DIR}"
       OUTPUT_VARIABLE TRY_OUT
       )
@@ -31,24 +21,18 @@ if(OPENCL_FOUND)
 
   set(HAVE_OPENCL 1)
 
-  if(WITH_OPENCL_SVM)
-    set(HAVE_OPENCL_SVM 1)
-  endif()
-
   set(OPENCL_INCLUDE_DIRS ${OPENCL_INCLUDE_DIR})
 
-  find_path(CL_BLAS_ROOT_DIR
-            NAMES include/clBLAS.h
-            PATHS ENV CLAMDBLAS_PATH ENV ProgramFiles
-            PATH_SUFFIXES clAmdBlas AMD/clAmdBlas
-            DOC "clBLAS root directory"
-            NO_DEFAULT_PATH)
-
-  find_path(CL_BLAS_INCLUDE_DIR
+  find_path(CL_BLAS_INCLUDE_DIRS
             NAMES clBLAS.h
             HINTS ${CLBLAS_ROOT_DIR}
             PATH_SUFFIXES include
             DOC "clBLAS include directory")
+
+  find_library(CL_BLAS_LIBRARYIES
+            NAMES "clBLAS"
+            PATH_SUFFIXES lib lib/import
+            DOC "clBLAS library path")
 
   if(CL_BLAS_INCLUDE_DIR)
     set(HAVE_CL_BLAS 1)

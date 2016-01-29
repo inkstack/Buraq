@@ -85,7 +85,12 @@ include(cmake/CompileOptions.cmake)
 #
 include(FindOpenCL)
 include(FindCUDA)
+include(cmake/Detect_clBLAS.cmake)
 
+message(STATUS "clBLAS include: ${CL_BLAS_INCLUDE_DIRS}")
+message(STATUS "clBLAS library: ${CL_BLAS_LIBRARYIES}")
+message(STATUS "cuBLAS include: ${CUDA_INCLUDE_DIRS}")
+message(STATUS "cuBLAS library: ${CUDA_CUBLAS_LIBRARIES}")
 # 
 # Deployment/installation setup
 # 
@@ -142,11 +147,26 @@ if(NOT SYSTEM_DIR_INSTALL)
 endif()
 
 
-# 
-# Project modules
-# 
+# Generate version-header
+string(TOUPPER ${META_PROJECT_NAME} META_PROJECT_NAME_UPPER)
+string(TOLOWER ${META_PROJECT_NAME} META_PROJECT_NAME_LOWER)
+configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME_LOWER}/version.h)
 
+# Project header
+set(PROJECT_HEADER_DIR "${CMAKE_SOURCE_DIR}/include")
+
+# Project source
+set(IDE_FOLDER "Sources")
 add_subdirectory(src)
+
+# Tests
+set(IDE_FOLDER "Tests")
+add_subdirectory(tests)
+
+# Examples
+set(IDE_FOLDER "Examples")
+# add_subdirectory(examples)
+
 add_subdirectory(docs)
 add_subdirectory(deploy)
 
@@ -168,3 +188,6 @@ install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
 
 # Install runtime data
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)
+
+# Deploy generated headers
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME} DESTINATION include COMPONENT dev)
