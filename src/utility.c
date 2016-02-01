@@ -30,7 +30,7 @@
 int
 print_info (void)
 {
-  puts("!!!Hello World!!!"); /* prints !!!Hello World!!! */
+  puts ("!!!Hello World!!!"); /* prints !!!Hello World!!! */
   int x;
   for (x = 0; x < 1000; x++)
 	{
@@ -39,3 +39,17 @@ print_info (void)
 	}
   return EXIT_SUCCESS;
 }
+
+#define print_levle1_result(vector_type) \
+void print_result_vector_type (size_t N, vector_type X[], vector_type Y[]) \
+{ \
+  size_t i; \
+  printf ("\nResult:\n"); \
+  printf (" X\n"); \
+  for (i = 0; i < N; i++){printf ("\t%f\n", X[i]);} \
+  printf ("Y\n"); \
+  for (i = 0; i < N; i++){printf ("\t%f\n", Y[i]);} \
+}
+
+print_levle1_result(cl_float)
+

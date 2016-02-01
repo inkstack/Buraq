@@ -31,8 +31,12 @@ set(headers
 )
 
 set(sources
-    ${CMAKE_CURRENT_SOURCE_DIR}/utility.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/fibonacci.c
+    utility.c
+    fibonacci.c
+)
+
+set(blas_sources
+    blas/swap.c
 )
 
 # 
@@ -41,6 +45,7 @@ set(sources
 # Build library
 add_library(${target}
     ${sources}
+    ${blas_sources}
     ${headers}
 )
 
@@ -99,6 +104,8 @@ target_include_directories(${target}
 # 
 target_link_libraries(${target}
     PRIVATE
+    ${OpenCL_LIBRARIES}
+    ${CL_BLAS_LIBRARYIES}
 
     PUBLIC
     ${DEFAULT_LIBRARIES}

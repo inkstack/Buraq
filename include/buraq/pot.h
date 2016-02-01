@@ -24,7 +24,11 @@
 #pragma once
 
 
+#include "buraq/core.h"
 #include "buraq/api.h"
 
 
 BURAQ_API unsigned int fibonacci(unsigned int i);
+
+BURAQ_API int hpc_swap(void);
+
