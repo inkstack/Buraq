@@ -16,6 +16,7 @@ set(sources
     main.cpp
     fibonacci_test.cpp
     swap_test.cpp
+    gemm_test.cpp
 )
 
 

@@ -45,4 +45,4 @@
 */
 BURAQ_API int print_info();
 
-BURAQ_API void print_result_cl_float (size_t N, cl_float X[], cl_float Y[]);
+BURAQ_API void print_result_s1 (size_t N, cl_float X[], cl_float Y[]);

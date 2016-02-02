@@ -140,7 +140,7 @@ hpc_swap(void)
                                     Y, 0, NULL, NULL);
 
         /* At this point you will get the result of SSWAP placed in vector X. */
-        print_result_cl_float(N, X, Y);
+        print_result_s1(N, X, Y);
     }
 
     /* Release OpenCL events. */

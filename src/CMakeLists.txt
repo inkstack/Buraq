@@ -37,6 +37,7 @@ set(sources
 
 set(blas_sources
     blas/swap.c
+    blas/gemm.c
 )
 
 # 
@@ -86,8 +87,8 @@ target_include_directories(${target}
     PRIVATE
     ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_BINARY_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${OpenCL_INCLUDE_DIR}
+    ${CUDA_TOOLKIT_INCLUDE}
 
     PUBLIC
     ${DEFAULT_INCLUDE_DIRECTORIES}
@@ -106,6 +107,8 @@ target_link_libraries(${target}
     PRIVATE
     ${OpenCL_LIBRARIES}
     ${CL_BLAS_LIBRARYIES}
+    ${CUDA_CUDART_LIBRARY}
+    ${CUDA_cublas_LIBRARY}
 
     PUBLIC
     ${DEFAULT_LIBRARIES}
