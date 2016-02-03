@@ -66,7 +66,7 @@ static const int incy = 1;
 
 
 BURAQ_API int
-hpc_swap(void)
+hpc_blas_swap(blas_handle handle, int n, float *x, int incx, float *y, int incy)
 {
     cl_int err;
     cl_platform_id platform = 0;

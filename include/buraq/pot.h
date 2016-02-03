@@ -30,6 +30,6 @@
 
 BURAQ_API unsigned int fibonacci(unsigned int i);
 
-BURAQ_API int hpc_swap(void);
+BURAQ_API int hpc_blas_swap(void);
 
 BURAQ_API int hpc_gemm(void);
