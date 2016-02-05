@@ -8,31 +8,16 @@
 # Library name and options
 # 
 # Target name
-set(target ${META_PROJECT_NAME_LOWER})
+set(target ${META_PROJECT_NAME_LOWER}_cuda)
 
 # Exit here if required dependencies are not met
 message(STATUS "Library ${target}")
 
-# Set API export file and macro
-string(TOUPPER ${target} target_upper)
-set(feature_file "${CMAKE_BINARY_DIR}/include/${target}/features.h")
-set(export_file  "${CMAKE_BINARY_DIR}/include/${target}/api.h")
-set(export_macro "${target_upper}_API")
-
-
 # 
 # Sources
 # 
-set(source_path  "${CMAKE_CURRENT_SOURCE_DIR}")
-
-set(headers
-    ${PROJECT_HEADER_DIR}/core.h
-    ${PROJECT_HEADER_DIR}/pot.h
-)
-
 set(sources
-    utility.c
-    fibonacci.c
+    gemm.c
 )
 
 # 
@@ -40,33 +25,10 @@ set(sources
 # 
 # Build library
 add_library(${target}
-    ${sources}
     ${headers}
+    ${sources}
 )
 
-# Export library for downstream projects
-export(TARGETS ${target} NAMESPACE ${META_PROJECT_NAME}:: FILE ${PROJECT_BINARY_DIR}/cmake/${target}/${target}-export.cmake)
-
-# Create feature detection header
-# Compilers: https://cmake.org/cmake/help/v3.1/variable/CMAKE_LANG_COMPILER_ID.html#variable:CMAKE_%3CLANG%3E_COMPILER_ID
-# Feature: https://cmake.org/cmake/help/v3.1/prop_gbl/CMAKE_CXX_KNOWN_FEATURES.html
-write_compiler_detection_header(
-    FILE ${feature_file}
-    PREFIX ${target_upper}
-    COMPILERS AppleClang Clang GNU MSVC
-    FEATURES cxx_alignas cxx_alignof cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
-)
-
-# Create API export header
-generate_export_header(${target}
-    EXPORT_FILE_NAME  ${export_file}
-    EXPORT_MACRO_NAME ${export_macro}
-)
-
-
-# 
-# Project options
-# 
 set_target_properties(${target}
     PROPERTIES
     ${DEFAULT_PROJECT_OPTIONS}
@@ -81,7 +43,6 @@ target_include_directories(${target}
     PRIVATE
     ${PROJECT_BINARY_DIR}/include
     ${PROJECT_SOURCE_DIR}/include
-    ${OpenCL_INCLUDE_DIR}
     ${CUDA_TOOLKIT_INCLUDE}
 
     PUBLIC
@@ -99,6 +60,8 @@ target_include_directories(${target}
 # 
 target_link_libraries(${target}
     PRIVATE
+    ${CUDA_CUDART_LIBRARY}
+    ${CUDA_cublas_LIBRARY}
 
     PUBLIC
     ${DEFAULT_LIBRARIES}
@@ -139,6 +102,7 @@ target_compile_options(${target}
 # 
 target_link_libraries(${target}
     PRIVATE
+    ${META_PROJECT_NAME_LOWER}
 
     PUBLIC
     ${DEFAULT_LINKER_OPTIONS}
@@ -146,13 +110,6 @@ target_link_libraries(${target}
     INTERFACE
 )
 
-# clBLAS
-set(IDE_FOLDER "clBLAS")
-add_subdirectory(ocl)
-
-# cuBLAS
-set(IDE_FOLDER "cuBLAS")
-add_subdirectory(cuda)
 
 # 
 # Deployment

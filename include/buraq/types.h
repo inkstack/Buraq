@@ -31,7 +31,7 @@
 #ifndef INCLUDE_BURAQ_TYPES_H_
 #define INCLUDE_BURAQ_TYPES_H_
 
-typedef hpc_float float;
+typedef float hpc_float;
 
 
 #endif /* INCLUDE_BURAQ_TYPES_H_ */

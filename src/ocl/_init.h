@@ -22,20 +22,33 @@
  * SOFTWARE.
  */
 /*
- * context.h
+ * _init.h
  *
- *  Created on: 2016-2-3
+ *  Created on: 2016-2-5
  *      Author: Halo9Pan
  */
 
-#ifndef INCLUDE_BURAQ_CONTEXT_H_
-#define INCLUDE_BURAQ_CONTEXT_H_
+#ifndef BURAQ_OCL_INIT_
+#define BURAQ_OCL_INIT_
 
-enum framework
-{
-  CUDA, OpenCL, MKL
-};
+#include <stdio.h>
 
-extern framework current_framework;
+#include <clBLAS.h>
 
-#endif /* INCLUDE_BURAQ_CONTEXT_H_ */
+#include "buraq/core.h"
+
+extern hpc_framework blas_framework;
+
+cl_int hpc_framework_initialize (void);
+
+cl_int hpc_handle_initialize (hpc_framework* blas_framework, hpc_handle* blas_handle);
+
+clblasStatus hpc_blas_initialize (void);
+
+cl_int hpc_framework_finalize (void);
+
+cl_int hpc_handle_finalize (hpc_handle* blas_handle);
+
+void hpc_blas_finalize (void);
+
+#endif /* BURAQ_OCL_INIT_ */

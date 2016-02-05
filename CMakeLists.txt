@@ -153,7 +153,7 @@ string(TOLOWER ${META_PROJECT_NAME} META_PROJECT_NAME_LOWER)
 configure_file(version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME_LOWER}/version.h)
 
 # Project header
-set(PROJECT_HEADER_DIR "${CMAKE_SOURCE_DIR}/include")
+set(PROJECT_HEADER_DIR "${CMAKE_SOURCE_DIR}/include/${META_PROJECT_NAME_LOWER}")
 
 # Project source
 set(IDE_FOLDER "Sources")

@@ -33,13 +33,49 @@
 #include "buraq/api.h"
 
 #include "buraq/types.h"
-#include "buraq/context.h"
 
 #ifdef __DEBUG__
 #define DEBUG(format,...) printf("File: "__FILE__", Line: %05d: "format"\n", __LINE__, ##__VA_ARGS__)
 #else
 #define DEBUG(format,...)
 #endif
+
+union hpc_platofrm {
+  cl_platform_id ocl;
+};
+
+union hpc_device {
+  cl_device_id ocl;
+};
+
+union hpc_context {
+  cl_context ocl;
+};
+
+union hpc_command_queue {
+  cl_command_queue ocl;
+};
+
+union hpc_memory {
+  cl_mem ocl;
+};
+
+union hpc_event {
+  cl_event ocl;
+};
+
+
+typedef struct _hpc_framework {
+  union hpc_platofrm platform;
+  union hpc_device device;
+  union hpc_context context;
+} hpc_framework;
+
+typedef struct _hpc_handle {
+  union hpc_command_queue command_queue;
+  union hpc_memory *buffer;
+  union hpc_event event;
+} hpc_handle;
 
 /**
 *  @brief

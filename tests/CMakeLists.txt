@@ -61,6 +61,8 @@ target_link_libraries(${target}
     PRIVATE
     ${DEFAULT_LIBRARIES}
     ${META_PROJECT_NAME_LOWER}
+    ${META_PROJECT_NAME_LOWER}_ocl
+    ${META_PROJECT_NAME_LOWER}_cuda
     gmock
 )
 

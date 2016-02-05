@@ -14,11 +14,11 @@ public:
 extern "C"
 {
   extern int BURAQ_API
-  hpc_swap (void);
+  hpc_blas_swap (void);
 }
 
 
 TEST_F(swap_test, CheckSomeResults)
   {
-	EXPECT_EQ((unsigned int) 0, hpc_swap());
+	EXPECT_EQ((unsigned int) 0, hpc_blas_swap());
   }

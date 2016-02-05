@@ -14,11 +14,11 @@ public:
 extern "C"
 {
   extern int BURAQ_API
-  hpc_gemm (void);
+  hpc_blas_gemm (void);
 }
 
 
 TEST_F(gemm_test, CheckSomeResults)
   {
-	EXPECT_EQ((unsigned int) 0, hpc_gemm());
+	EXPECT_EQ((unsigned int) 0, hpc_blas_gemm());
   }

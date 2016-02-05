@@ -67,7 +67,7 @@ static void simple_sgemm(int n, float alpha, const float *A, const float *B,
 
 /* Main */
 BURAQ_API int
-hpc_gemm(void)
+hpc_blas_gemm(void)
 {
     cublasStatus_t status;
     float *h_A;
