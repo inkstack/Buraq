@@ -41,7 +41,7 @@ extern hpc_framework blas_framework;
 
 cl_int hpc_framework_initialize (void);
 
-cl_int hpc_handle_initialize (hpc_framework* blas_framework, hpc_handle* blas_handle);
+cl_int hpc_handle_initialize (hpc_handle* blas_handle);
 
 clblasStatus hpc_blas_initialize (void);
 

@@ -73,7 +73,9 @@ typedef struct _hpc_framework {
 
 typedef struct _hpc_handle {
   union hpc_command_queue command_queue;
-  union hpc_memory *buffer;
+  union hpc_memory* memory;
+  int* memory_size;
+  unsigned int memory_length;
   union hpc_event event;
 } hpc_handle;
 
