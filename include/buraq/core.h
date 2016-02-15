@@ -40,43 +40,43 @@
 #define DEBUG(format,...)
 #endif
 
-union hpc_platofrm {
+typedef union _hpc_platofrm {
   cl_platform_id ocl;
-};
+} hpc_platofrm;
 
-union hpc_device {
+typedef union _hpc_device {
   cl_device_id ocl;
-};
+} hpc_device;
 
-union hpc_context {
+typedef union _hpc_context {
   cl_context ocl;
-};
+} hpc_context;
 
-union hpc_command_queue {
+typedef union _hpc_command_queue {
   cl_command_queue ocl;
-};
+} hpc_command_queue;
 
-union hpc_memory {
+typedef union _hpc_memory {
   cl_mem ocl;
-};
+} hpc_memory;
 
-union hpc_event {
+typedef union _hpc_event {
   cl_event ocl;
-};
+} hpc_event;
 
 
 typedef struct _hpc_framework {
-  union hpc_platofrm platform;
-  union hpc_device device;
-  union hpc_context context;
+  hpc_platofrm platform;
+  hpc_device device;
+  hpc_context context;
 } hpc_framework;
 
 typedef struct _hpc_handle {
-  union hpc_command_queue command_queue;
-  union hpc_memory* memory;
+  hpc_command_queue command_queue;
+  hpc_memory* memory;
   int* memory_size;
   unsigned int memory_length;
-  union hpc_event event;
+  hpc_event event;
 } hpc_handle;
 
 /**

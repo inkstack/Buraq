@@ -70,15 +70,10 @@ hpc_handle_initialize (hpc_handle* blas_handle)
   cl_int err;
   cl_command_queue command_queue = clCreateCommandQueue (blas_framework.context.ocl, blas_framework.device.ocl, 0, &err);
   blas_handle->command_queue.ocl = command_queue;
-  printf ("command_queue address: %p\n", &command_queue);
-  printf ("blas_handle->command_queue address: %p\n", &blas_handle->command_queue);
-  printf ("blas_handle->command_queue.ocl address: %p\n", &blas_handle->command_queue.ocl);
   for (unsigned int i = 0; i < blas_handle->memory_length; ++i) {
 	  cl_mem buffer = clCreateBuffer (blas_framework.context.ocl, CL_MEM_READ_WRITE, blas_handle->memory_size[i], NULL, &err);
 	  blas_handle->memory[i].ocl = buffer;
   }
-  printf ("Size of handle: %d\n", sizeof(blas_handle));
-  printf ("Length of handle: %d\n", blas_handle->memory_length);
   return err;
 }
 

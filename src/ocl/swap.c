@@ -67,7 +67,7 @@ hpc_blas_swap (void)
   unsigned int memory_lenght = 2;
   blas_handle->memory_length = memory_lenght;
   blas_handle->memory_size = (int *)malloc(memory_lenght * sizeof(int));
-  blas_handle->memory = (union hpc_memory *)malloc(memory_lenght * sizeof(union hpc_memory));
+  blas_handle->memory = (hpc_memory *)malloc(memory_lenght * sizeof(hpc_memory));
   hpc_handle_initialize(blas_handle);
   hpc_blas_initialize();
   cl_mem bufX, bufY;
@@ -85,10 +85,8 @@ hpc_blas_swap (void)
   err = clEnqueueWriteBuffer (blas_handle->command_queue.ocl, bufX, CL_TRUE, 0, (lenX * sizeof(cl_float)), X, 0, NULL, NULL);
   err = clEnqueueWriteBuffer (blas_handle->command_queue.ocl, bufY, CL_TRUE, 0, (lenY * sizeof(cl_float)), Y, 0, NULL, NULL);
 
-  printf ("blas_handle->command_queue address: %p\n", &blas_handle->command_queue);
-  printf ("blas_handle->command_queue.ocl address: %p\n", &blas_handle->command_queue.ocl);
   /* Call clblas function. */
-  err = clblasSswap (N, bufX, 0, incx, bufY, 0, incy, 1, blas_handle->command_queue.ocl, 0, NULL, &event);
+  err = clblasSswap (N, bufX, 0, incx, bufY, 0, incy, 1, &blas_handle->command_queue.ocl, 0, NULL, &event);
   if (err != CL_SUCCESS)
 	{
 	  printf ("clblasSswap() failed with %d\n", err);
