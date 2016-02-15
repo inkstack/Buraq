@@ -35,9 +35,7 @@ hpc_framework blas_framework;
 cl_int
 hpc_framework_initialize (void)
 {
-  printf ("Size of framework: %d\n", sizeof(blas_framework));
-
-  cl_int err;
+  cl_int err = CL_SUCCESS;
   /* Setup OpenCL environment. */
   err = clGetPlatformIDs (1, &blas_framework.platform.ocl, NULL);
   if (err != CL_SUCCESS)
@@ -67,18 +65,23 @@ hpc_framework_initialize (void)
 cl_int
 hpc_handle_initialize (hpc_handle* blas_handle)
 {
-  cl_int err;
+  cl_int err = CL_SUCCESS;
   cl_command_queue command_queue = clCreateCommandQueue (blas_framework.context.ocl, blas_framework.device.ocl, 0, &err);
+  if (err != CL_SUCCESS)
+	{
+	  printf ("clCreateCommandQueue() failed with %d\n", err);
+	  return err;
+	}
   blas_handle->command_queue.ocl = command_queue;
-  printf ("command_queue address: %p\n", &command_queue);
-  printf ("blas_handle->command_queue address: %p\n", &blas_handle->command_queue);
-  printf ("blas_handle->command_queue.ocl address: %p\n", &blas_handle->command_queue.ocl);
-  for (unsigned int i = 0; i < blas_handle->memory_length; ++i) {
+  for (uint8_t i = 0; i < blas_handle->memory_length; ++i) {
 	  cl_mem buffer = clCreateBuffer (blas_framework.context.ocl, CL_MEM_READ_WRITE, blas_handle->memory_size[i], NULL, &err);
+	  if (err != CL_SUCCESS)
+		{
+		  printf ("clCreateBuffer() failed with %d\n", err);
+		  return err;
+		}
 	  blas_handle->memory[i].ocl = buffer;
   }
-  printf ("Size of handle: %d\n", sizeof(blas_handle));
-  printf ("Length of handle: %d\n", blas_handle->memory_length);
   return err;
 }
 
@@ -103,6 +106,15 @@ cl_int
 hpc_handle_finalize (hpc_handle* blas_handle)
 {
   cl_int err = clReleaseCommandQueue (blas_handle->command_queue.ocl);
+  for (uint8_t i = 0; i < blas_handle->memory_length; ++i) {
+	  /* Release OpenCL memory objects. */
+	  err = clReleaseMemObject(blas_handle->memory[i].ocl);
+	  if (err != CL_SUCCESS)
+		{
+		  printf ("clReleaseMemObject() failed with %d\n", err);
+		  return err;
+		}
+  }
   return err;
 }
 

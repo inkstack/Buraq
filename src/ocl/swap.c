@@ -41,54 +41,32 @@
 hpc_framework blas_framework;
 hpc_handle* blas_handle;
 
-/* This example uses predefined matrices and their characteristics for
- * simplicity purpose.
- */
-static const size_t N = 7;
-
-static hpc_float X[] =
-  { 11, 21, 31, 41, 51, 61, 71, };
-static const int incx = 1;
-
-static hpc_float Y[] =
-  { 45, 23, 39, 45, 50, 55, 65, };
-static const int incy = 1;
-
 BURAQ_API int
-//hpc_blas_swap(blas_framework handle, int n, float *x, int incx, float *y, int incy)
-hpc_blas_swap (void)
+hpc_blas_swap(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t incy)
 {
   int ret = 0;
-  int lenX = 1 + (N - 1) * abs (incx);
-  int lenY = 1 + (N - 1) * abs (incy);
+  uint32_t X_length = 1 + (n - 1) * abs (incx);
+  uint32_t Y_length = 1 + (n - 1) * abs (incy);
 
   hpc_framework_initialize();
   blas_handle = (hpc_handle *)malloc(sizeof(hpc_handle));
-  unsigned int memory_lenght = 2;
+  uint8_t memory_lenght = 2;
   blas_handle->memory_length = memory_lenght;
-  blas_handle->memory_size = (int *)malloc(memory_lenght * sizeof(int));
-  blas_handle->memory = (union hpc_memory *)malloc(memory_lenght * sizeof(union hpc_memory));
+  hpc_float* parameters[] = {X, Y};
+  uint32_t memory_size[] = {X_length * sizeof(cl_float), Y_length * sizeof(cl_float)};
+  blas_handle->memory_size = memory_size;
+  blas_handle->memory = (hpc_memory *)malloc(memory_lenght * sizeof(hpc_memory));
   hpc_handle_initialize(blas_handle);
   hpc_blas_initialize();
-  cl_mem bufX, bufY;
   cl_event event = NULL;
-  cl_int err;
-  if (err != CL_SUCCESS)
-	{
-	  printf ("clCreateCommandQueue() failed with %d\n", err);
-	  return err;
-	}
-  /* Prepare OpenCL memory objects and place vectors inside them. */
-  bufX = clCreateBuffer (blas_framework.context.ocl, CL_MEM_READ_WRITE, (lenX * sizeof(cl_float)), NULL, &err);
-  bufY = clCreateBuffer (blas_framework.context.ocl, CL_MEM_READ_WRITE, (lenY * sizeof(cl_float)), NULL, &err);
+  cl_int err = CL_SUCCESS;
 
-  err = clEnqueueWriteBuffer (blas_handle->command_queue.ocl, bufX, CL_TRUE, 0, (lenX * sizeof(cl_float)), X, 0, NULL, NULL);
-  err = clEnqueueWriteBuffer (blas_handle->command_queue.ocl, bufY, CL_TRUE, 0, (lenY * sizeof(cl_float)), Y, 0, NULL, NULL);
+  for (int i = 0; i < memory_lenght; ++i) {
+	err = clEnqueueWriteBuffer (blas_handle->command_queue.ocl, blas_handle->memory[i].ocl, CL_TRUE, 0, memory_size[i], parameters[i], 0, NULL, NULL);
+  }
 
-  printf ("blas_handle->command_queue address: %p\n", &blas_handle->command_queue);
-  printf ("blas_handle->command_queue.ocl address: %p\n", &blas_handle->command_queue.ocl);
   /* Call clblas function. */
-  err = clblasSswap (N, bufX, 0, incx, bufY, 0, incy, 1, blas_handle->command_queue.ocl, 0, NULL, &event);
+  err = clblasSswap (n, blas_handle->memory[0].ocl, 0, incx, blas_handle->memory[1].ocl, 0, incy, 1, &blas_handle->command_queue.ocl, 0, NULL, &event);
   if (err != CL_SUCCESS)
 	{
 	  printf ("clblasSswap() failed with %d\n", err);
@@ -100,21 +78,19 @@ hpc_blas_swap (void)
 	  err = clWaitForEvents (1, &event);
 
 	  /* Fetch results of calculations from GPU memory. */
-	  err = clEnqueueReadBuffer (blas_handle->command_queue.ocl, bufX, CL_TRUE, 0, (lenX * sizeof(cl_float)), X, 0, NULL, NULL);
-	  err = clEnqueueReadBuffer (blas_handle->command_queue.ocl, bufY, CL_TRUE, 0, (lenY * sizeof(cl_float)), Y, 0, NULL, NULL);
+	  for (int i = 0; i < memory_lenght; ++i) {
+		err = clEnqueueReadBuffer (blas_handle->command_queue.ocl, blas_handle->memory[i].ocl, CL_TRUE, 0, memory_size[i], parameters[i], 0, NULL, NULL);
+	  }
 
 	  /* At this point you will get the result of SSWAP placed in vector X. */
-	  print_result_s1 (N, X, Y);
+	  print_result_s1 (n, X, Y);
 	}
 
   /* Release OpenCL events. */
   clReleaseEvent (event);
 
-  /* Release OpenCL memory objects. */
-  clReleaseMemObject (bufY);
-  clReleaseMemObject (bufX);
-
   hpc_blas_finalize();
+  hpc_handle_finalize(blas_handle);
   hpc_framework_finalize();
 
   return ret;
