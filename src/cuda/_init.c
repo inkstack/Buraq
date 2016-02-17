@@ -24,7 +24,7 @@
 /*
  * _init.c
  *
- *  Created on: 2016-2-5
+ *  Created on: 2016-2-17
  *      Author: Halo9Pan
  */
 
@@ -32,36 +32,7 @@
 
 hpc_framework blas_framework;
 
-cl_int
-hpc_framework_initialize (void)
-{
-  cl_int err = CL_SUCCESS;
-  /* Setup OpenCL environment. */
-  err = clGetPlatformIDs (1, &blas_framework.platform.ocl, NULL);
-  if (err != CL_SUCCESS)
-	{
-	  printf ("clGetPlatformIDs() failed with %d\n", err);
-	  return err;
-	}
-
-  err = clGetDeviceIDs (blas_framework.platform.ocl, CL_DEVICE_TYPE_GPU, 1, &blas_framework.device.ocl, NULL);
-  if (err != CL_SUCCESS)
-	{
-	  printf ("clGetDeviceIDs() failed with %d\n", err);
-	  return err;
-	}
-
-  blas_framework.context.ocl = clCreateContext (NULL, 1, &blas_framework.device.ocl, NULL, NULL, &err);
-  if (err != CL_SUCCESS)
-	{
-	  printf ("clCreateContext() failed with %d\n", err);
-	  return err;
-	}
-
-  return CL_SUCCESS;
-}
-
-cl_int
+int
 hpc_handle_initialize (hpc_handle* blas_handle)
 {
   cl_int err = CL_SUCCESS;
@@ -90,14 +61,6 @@ hpc_blas_initialize (void)
   /* Setup clblas. */
   clblasStatus status = clblasSetup ();
   return status;
-}
-
-/* Release OpenCL working objects. */
-cl_int
-hpc_framework_finalize (void)
-{
-  cl_int err = clReleaseContext (blas_framework.context.ocl);
-  return err;
 }
 
 /* Release OpenCL working objects. */

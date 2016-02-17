@@ -16,7 +16,13 @@ message(STATUS "Library ${target}")
 # 
 # Sources
 # 
+set(headers
+    _init.h
+)
+
 set(sources
+    _init.c
+#   swap.c
     gemm.c
 )
 

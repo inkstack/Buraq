@@ -24,33 +24,28 @@
 /*
  * _init.h
  *
- *  Created on: 2016-2-5
+ *  Created on: 2016-2-17
  *      Author: Halo9Pan
  */
 
-#ifndef BURAQ_OCL_INIT_
-#define BURAQ_OCL_INIT_
-
-#define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+#ifndef BURAQ_CUDA_INIT_
+#define BURAQ_CUDA_INIT_
 
 #include <stdio.h>
 
-#include <clBLAS.h>
+#include <cuda_runtime.h>
+#include <cublas_v2.h>
 
 #include "buraq/core.h"
 
 extern hpc_framework blas_framework;
 
-cl_int hpc_framework_initialize (void);
-
-cl_int hpc_handle_initialize (hpc_handle* blas_handle);
+int hpc_handle_initialize (hpc_handle* blas_handle);
 
 clblasStatus hpc_blas_initialize (void);
 
-cl_int hpc_framework_finalize (void);
-
-cl_int hpc_handle_finalize (hpc_handle* blas_handle);
+int hpc_handle_finalize (hpc_handle* blas_handle);
 
 void hpc_blas_finalize (void);
 
-#endif /* BURAQ_OCL_INIT_ */
+#endif /* BURAQ_CUDA_INIT_ */

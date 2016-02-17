@@ -42,9 +42,8 @@ hpc_framework blas_framework;
 hpc_handle* blas_handle;
 
 BURAQ_API int
-hpc_blas_swap(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t incy)
+hpc_blas_swap_s(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t incy)
 {
-  int ret = 0;
   uint32_t X_length = 1 + (n - 1) * abs (incx);
   uint32_t Y_length = 1 + (n - 1) * abs (incy);
 
@@ -70,7 +69,6 @@ hpc_blas_swap(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t in
   if (err != CL_SUCCESS)
 	{
 	  printf ("clblasSswap() failed with %d\n", err);
-	  ret = 1;
 	}
   else
 	{
@@ -81,9 +79,6 @@ hpc_blas_swap(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t in
 	  for (int i = 0; i < memory_lenght; ++i) {
 		err = clEnqueueReadBuffer (blas_handle->command_queue.ocl, blas_handle->memory[i].ocl, CL_TRUE, 0, memory_size[i], parameters[i], 0, NULL, NULL);
 	  }
-
-	  /* At this point you will get the result of SSWAP placed in vector X. */
-	  print_result_s1 (n, X, Y);
 	}
 
   /* Release OpenCL events. */
@@ -93,6 +88,6 @@ hpc_blas_swap(uint32_t n, hpc_float *X, uint32_t incx, hpc_float *Y, uint32_t in
   hpc_handle_finalize(blas_handle);
   hpc_framework_finalize();
 
-  return ret;
+  return err;
 }
 
