@@ -33,56 +33,34 @@
 hpc_framework blas_framework;
 
 int
-hpc_handle_initialize (hpc_handle* blas_handle)
+hpc_framework_initialize (void)
 {
-  cl_int err = CL_SUCCESS;
-  cl_command_queue command_queue = clCreateCommandQueue (blas_framework.context.ocl, blas_framework.device.ocl, 0, &err);
-  if (err != CL_SUCCESS)
-	{
-	  printf ("clCreateCommandQueue() failed with %d\n", err);
-	  return err;
-	}
-  blas_handle->command_queue.ocl = command_queue;
-  for (uint8_t i = 0; i < blas_handle->memory_length; ++i) {
-	  cl_mem buffer = clCreateBuffer (blas_framework.context.ocl, CL_MEM_READ_WRITE, blas_handle->memory_size[i], NULL, &err);
-	  if (err != CL_SUCCESS)
-		{
-		  printf ("clCreateBuffer() failed with %d\n", err);
-		  return err;
-		}
-	  blas_handle->memory[i].ocl = buffer;
-  }
-  return err;
+
 }
 
-clblasStatus
+int
+hpc_handle_initialize (hpc_handle* blas_handle)
+{
+}
+
+cublasStatus_t
 hpc_blas_initialize (void)
 {
-  /* Setup clblas. */
-  clblasStatus status = clblasSetup ();
-  return status;
+}
+
+int
+hpc_framework_finalize (void)
+{
+
 }
 
 /* Release OpenCL working objects. */
-cl_int
+int
 hpc_handle_finalize (hpc_handle* blas_handle)
 {
-  cl_int err = clReleaseCommandQueue (blas_handle->command_queue.ocl);
-  for (uint8_t i = 0; i < blas_handle->memory_length; ++i) {
-	  /* Release OpenCL memory objects. */
-	  err = clReleaseMemObject(blas_handle->memory[i].ocl);
-	  if (err != CL_SUCCESS)
-		{
-		  printf ("clReleaseMemObject() failed with %d\n", err);
-		  return err;
-		}
-  }
-  return err;
 }
 
 void
 hpc_blas_finalize (void)
 {
-  /* Finalize work with clblas. */
-  clblasTeardown ();
 }

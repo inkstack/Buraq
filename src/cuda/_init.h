@@ -40,9 +40,13 @@
 
 extern hpc_framework blas_framework;
 
+int hpc_framework_initialize (void);
+
 int hpc_handle_initialize (hpc_handle* blas_handle);
 
-clblasStatus hpc_blas_initialize (void);
+cublasStatus_t hpc_blas_initialize (void);
+
+int hpc_framework_finalize (void);
 
 int hpc_handle_finalize (hpc_handle* blas_handle);
 
