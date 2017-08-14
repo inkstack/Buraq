@@ -1,2 +1,2 @@
-# [Buraq](https://en.wikipedia.org/wiki/Buraq)
+# [Capri](http://www.colorhexa.com/00bfff)
 Wrapper clBLAS and cuBLAS
